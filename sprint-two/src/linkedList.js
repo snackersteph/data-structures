@@ -33,7 +33,15 @@ var LinkedList = function() {
   };
 
   list.contains = function(target) {
-    // if (this.value === target)
+    var currentNode = this.head;
+    while (currentNode) {
+      if ( currentNode.value === target ) {
+        return true;
+      } else {
+        currentNode = currentNode.next;
+      }
+    }
+    return false;
   };
 
   return list;
@@ -55,7 +63,4 @@ var Node = function(value) {
 var ll = LinkedList();
 ll.addToTail(4);
 console.log(ll);
-
-
-
 
