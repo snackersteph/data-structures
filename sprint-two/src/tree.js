@@ -15,10 +15,37 @@ treeMethods.addChild = function(value) {
   this.children.push(newNode);
 };
 
+// treeMethods.contains = function(target) {
+//   var output = false;
+//   if (this.value === target) {
+//     output = true;
+//   } 
+  
+//   if (this.children) {
+//     treeMethods.contains(target);
+//   } 
+//   return output;
+// };
+
+
 treeMethods.contains = function(target) {
-};
-
-
+  var output = false;
+  
+  function inner(target) {
+    if (this.value === target) {
+        output = true;
+      } else {
+        if (this.children) {
+          for (var i = 0; i < this.children.length; i++) {
+            console.log(this.children.length);
+            inner(this.children[i]);
+          }
+        }
+      }
+  inner(target);
+  return output;
+  };
+}
 
 /*
  * Complexity: What is the time complexity of the above functions?
