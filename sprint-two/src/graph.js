@@ -1,5 +1,3 @@
-
-
 // Instantiate a new graph
 var Graph = function() {
   this.storage = {};
@@ -18,28 +16,25 @@ Graph.prototype.contains = function(node) {
 
 // Removes a node from the graph.
 Graph.prototype.removeNode = function(node) {
-  var pointerDelete = this.storage[node].edges //3
-  // var edgesArray = this.storage[fromNode].edges
-  // for (i=0; i < edgesArray.length; i++) {
-  //   if (this.storage[fromNode].edges )
-  //  //iterate the edgesArray
-  // } 
-
-  // if (this.storage[i].edge === pointerDelete) {
-  //   this.storage[i].edge = null;
-  // } ;
-
+  var array = this.storage[node].edges;
+  
+  for (var i = 0; i < array.length; i++) {
+    var pointer = this.storage[array[i]].edges.indexOf(node);
+    this.storage[array[i]].edges.splice(pointer, 1);     
+  }
   delete this.storage[node];
 };
 
 // Returns a boolean indicating whether two specified nodes are connected.  Pass in the values contained in each of the two nodes.
 Graph.prototype.hasEdge = function(fromNode, toNode) {
-  var edgesArray = this.storage[fromNode].edges
-  if (edgesArray.indexOf(toNode)) {
-    return true;
+  if (this.storage[fromNode] === undefined || this.storage[toNode] === undefined) {
+    return false;
   }
-  var otherEdgesArray = this.storage[toNode].edges
-  if (edgesArray.indexOf(fromNode)) {
+
+  var edgesArray = this.storage[fromNode].edges;  
+  var otherEdgesArray = this.storage[toNode].edges;
+
+  if (edgesArray.indexOf(toNode) !== -1 && otherEdgesArray.indexOf(fromNode) !== -1) {
     return true;
   }
   return false;
@@ -47,19 +42,29 @@ Graph.prototype.hasEdge = function(fromNode, toNode) {
 
 // Connects two nodes in a graph by adding an edge between them.
 Graph.prototype.addEdge = function(fromNode, toNode) {
-  this.storage[fromNode].edges.push(toNode);
-  this.storage[toNode].edges.push(toNode)
+  this.storage[fromNode].edges.push(Number(toNode));
+  this.storage[toNode].edges.push(+fromNode);
   
 };
 
 // Remove an edge between any two specified (by value) nodes.
 Graph.prototype.removeEdge = function(fromNode, toNode) {
-  this.storage[fromNode].edges = null;
-  this.storage[toNode].edges = null;
+  var firstArray = this.storage[fromNode].edges;
+  var pointer = firstArray.indexOf(toNode);
+  firstArray.splice(pointer, 1);     
+  
+  var secondArray = this.storage[toNode].edges;
+  var pointer = secondArray.indexOf(fromNode);
+  secondArray.splice(pointer, 1);     
 };
 
 // Pass in a callback which will be executed on each node of the graph.
 Graph.prototype.forEachNode = function(cb) {
+  var object = this.storage;
+  for (var key in object) {
+    cb(key);
+  }
+
 };
 
 /*
@@ -67,16 +72,13 @@ Graph.prototype.forEachNode = function(cb) {
  */
 
 var graph = new Graph();
+var connectToFive = function(item) {
+  graph.addEdge(item, 5);
+};
+graph.addNode(5);
 graph.addNode(2);
 graph.addNode(1);
 graph.addNode(3);
-graph.addEdge(3, 2);
-graph.removeNode(3);
+graph.forEachNode(connectToFive);
 
-console.log(graph.storage)
-
-
-
-
-
-
+console.log(graph.storage);
