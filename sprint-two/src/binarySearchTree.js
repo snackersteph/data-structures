@@ -17,7 +17,7 @@ littleTree.insert = function (num) {
   // check if value is smaller
   // if smaller, value is root.left
 
-  if (this.value < num) {
+  if (num > this.value) {
     if (this.right === null) {
       this.right = newNode;
     } else {
